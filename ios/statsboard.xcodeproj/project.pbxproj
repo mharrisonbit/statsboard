@@ -229,20 +229,15 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-statsboard/Pods-statsboard-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-statsboard/Pods-statsboard-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-statsboard/Pods-statsboard-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-        
 		C3615EC1A88F20A85A8D1E38 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -251,13 +246,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-statsboard/Pods-statsboard-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-statsboard/Pods-statsboard-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
