@@ -11,7 +11,7 @@ const HomeView = () => {
         <CustomButton
           style={styles.button}
           title="Teams"
-          onPress={() => navButtonPress('Details')}
+          onPress={() => navButtonPress('Teams')}
           iconName="save"
         />
         <CustomButton

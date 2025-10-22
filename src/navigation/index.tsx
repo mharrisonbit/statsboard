@@ -1,4 +1,3 @@
-import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -13,6 +12,7 @@ import GlossaryView from '../Views/GlossaryView';
 import HomeView from '../Views/HomeView';
 import SettingsView from '../Views/SettingsView';
 import ShowsView from '../Views/ShowsView';
+import TeamsView from '../Views/TeamsView';
 import { navigationRef } from './ref';
 import type { RootStackParamList, RootTabParamList } from './types';
 
@@ -26,9 +26,7 @@ try {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
-type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 type DetailsProps = NativeStackScreenProps<RootStackParamList, 'Details'>;
-type SettingsProps = BottomTabScreenProps<RootTabParamList, 'Settings'>;
 
 function DetailsScreen({ route }: DetailsProps) {
   const id = route.params?.id;
@@ -113,6 +111,7 @@ export default function Navigation() {
                 },
               },
               Details: 'details/:id',
+              Teams: 'teams',
               Stats: 'stats',
               Shows: 'shows',
               Glossary: 'glossary',
@@ -123,13 +122,11 @@ export default function Navigation() {
         <RootStack.Navigator screenOptions={{ headerShown: false }}>
           <RootStack.Screen name="Main" component={MainTabs} />
           <RootStack.Screen
-            name="Details"
-            component={DetailsScreen}
+            name="Teams"
+            component={TeamsView}
             options={({ route }) => ({
               headerShown: true,
-              title: route?.params?.id
-                ? `Details ${route.params.id}`
-                : 'Details',
+              title: route?.params?.id ? `Team ${route.params.id}` : 'Teams',
             })}
           />
           <RootStack.Screen
