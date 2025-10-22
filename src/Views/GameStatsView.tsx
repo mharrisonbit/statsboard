@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import useGameStatsViewModel from '../ViewModels/GameStatsViewModel';
 
 const GameStatsView = () => {
-  const {} = useGameStatsViewModel();
+  const { isLoading } = useGameStatsViewModel();
 
   return (
     <View style={styles.mainContainer}>
