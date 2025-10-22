@@ -5,7 +5,7 @@ import { Standing } from "../Models/Standing";
 
 const useGameStatsViewModel = () => {
     const {isLoading, getTeamStats} = useNHLDataManager();
-    const {games, setGames} = useState<Standing[]>([]);
+    const [games, setGames] = useState<Standing[]>([]);
 
     const loadGames = async() => {
         const effectiveDate = new Date();
