@@ -8,11 +8,11 @@ import {
   View,
 } from 'react-native';
 import { SvgUri } from 'react-native-svg';
-import useCustomModalPopup from '../Components/CustomPopup';
-import InputWithButton from '../Components/InputWithButton';
-import useGameStatsViewModel from '../ViewModels/GameStatsViewModel';
+import useCustomModalPopup from '../Components/CustomPopup.tsx';
+import InputWithButton from '../Components/InputWithButton.tsx';
+import useTeamStatsViewModel from '../ViewModels/TeamStatsViewModel.ts';
 
-const GameStatsView = () => {
+const TeamStatsView = () => {
   const {
     isLoading,
     games,
@@ -21,7 +21,7 @@ const GameStatsView = () => {
     scrollViewRef,
     searchStandings,
     onChangeText,
-  } = useGameStatsViewModel();
+  } = useTeamStatsViewModel();
   const { openModal, ModalComponent } = useCustomModalPopup();
 
   useFocusEffect(
@@ -131,4 +131,4 @@ const styles = StyleSheet.create({
   imageContainer: {},
 });
 
-export default GameStatsView;
+export default TeamStatsView;

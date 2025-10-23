@@ -4,7 +4,7 @@ import useNHLDataManager from "../Data/DataManager";
 import { Standing } from "../Models/Standing";
 
 
-const useGameStatsViewModel = () => {
+const useTeamStatsViewModel = () => {
     const {isLoading, getTeamStats} = useNHLDataManager();
     const [games, setGames] = useState<Standing[]>([]);
     const [searchText, onChangeText] = useState("");
@@ -70,4 +70,4 @@ const useGameStatsViewModel = () => {
     }
 }
 
-export default useGameStatsViewModel;
+export default useTeamStatsViewModel;

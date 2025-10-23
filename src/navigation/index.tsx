@@ -7,14 +7,16 @@ import { StyleSheet, Text } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { enableScreens } from 'react-native-screens';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import GameStatsView from '../Views/GameStatsView';
+import TeamStatsView from '../Views/TeamStatsView.tsx';
 import GlossaryView from '../Views/GlossaryView';
 import HomeView from '../Views/HomeView';
 import SettingsView from '../Views/SettingsView';
 import ShowsView from '../Views/ShowsView';
 import TeamsView from '../Views/TeamsView';
+import GamesView from '../Views/GamesView';
 import { navigationRef } from './ref';
 import type { RootStackParamList, RootTabParamList } from './types';
+
 
 // Guard enableScreens
 try {
@@ -105,6 +107,11 @@ export default function Navigation() {
                     screens: {
                       Home: 'home',
                       Details: 'details/:id',
+                      Teams: 'teams',
+                      Stats: 'stats',
+                      Shows: 'shows',
+                      Games: 'games',
+                      Glossary: 'glossary',
                     },
                   },
                   Settings: 'settings',
@@ -114,12 +121,18 @@ export default function Navigation() {
               Teams: 'teams',
               Stats: 'stats',
               Shows: 'shows',
+              Games: 'games',
               Glossary: 'glossary',
             },
           },
         }}
       >
-        <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        <RootStack.Navigator
+          screenOptions={{
+            headerShown: false,
+            headerBackButtonDisplayMode: 'minimal',
+          }}
+        >
           <RootStack.Screen name="Main" component={MainTabs} />
           <RootStack.Screen
             name="Teams"
@@ -131,7 +144,17 @@ export default function Navigation() {
           />
           <RootStack.Screen
             name="Stats"
-            component={GameStatsView}
+            component={TeamStatsView}
+            options={({ route }) => ({
+              headerShown: true,
+              title: route?.params?.id
+                ? `game stats ${route.params.id}`
+                : 'games stat',
+            })}
+          />
+          <RootStack.Screen
+            name="Games"
+            component={GamesView}
             options={({ route }) => ({
               headerShown: true,
               title: route?.params?.id

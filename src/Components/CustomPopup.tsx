@@ -47,6 +47,8 @@ const useCustomModalPopup = () => {
   return { openModal, closeModal, ModalComponent };
 };
 
+export default useCustomModalPopup;
+
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
@@ -78,5 +80,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-export default useCustomModalPopup;
