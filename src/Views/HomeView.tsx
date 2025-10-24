@@ -32,7 +32,7 @@ const HomeView = () => {
         />
         <CustomButton
           style={styles.button}
-          title="Shows"
+          title="Streams"
           onPress={() => navButtonPress('Shows')}
           iconName="tv"
         />

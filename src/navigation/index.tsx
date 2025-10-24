@@ -138,7 +138,7 @@ export default function Navigation() {
             component={TeamsView}
             options={({ route }) => ({
               headerShown: true,
-              title: route?.params?.id ? `Team ${route.params.id}` : 'Teams',
+              title: 'Teams',
             })}
           />
           <RootStack.Screen
@@ -146,9 +146,7 @@ export default function Navigation() {
             component={TeamStatsView}
             options={({ route }) => ({
               headerShown: true,
-              title: route?.params?.id
-                ? `game stats ${route.params.id}`
-                : 'games stat',
+              title: 'Games Stat',
             })}
           />
           <RootStack.Screen
@@ -156,9 +154,7 @@ export default function Navigation() {
             component={GamesView}
             options={({ route }) => ({
               headerShown: true,
-              title: route?.params?.id
-                ? `game stats ${route.params.id}`
-                : 'games stat',
+              title: 'Games',
             })}
           />
           <RootStack.Screen
@@ -166,7 +162,7 @@ export default function Navigation() {
             component={ShowsView}
             options={({ route }) => ({
               headerShown: true,
-              title: route?.params?.id ? `show ${route.params.id}` : 'shows',
+              title: 'Streams',
             })}
           />
           <RootStack.Screen
@@ -174,9 +170,7 @@ export default function Navigation() {
             component={GlossaryView}
             options={({ route }) => ({
               headerShown: true,
-              title: route?.params?.id
-                ? `Glossary ${route.params.id}`
-                : 'Glossary',
+              title: 'Glossary',
             })}
           />
         </RootStack.Navigator>
