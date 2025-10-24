@@ -1,3 +1,5 @@
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 import {
   RefreshControl,
   ScrollView,
@@ -27,6 +29,12 @@ const GamesView = () => {
     showGameData,
     SaveGame,
   } = useGamesViewModel();
+
+  useFocusEffect(
+    useCallback(() => {
+      getScoresForToday();
+    }, []),
+  );
 
   return (
     <View style={styles.mainContainer}>

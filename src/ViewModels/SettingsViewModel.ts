@@ -4,11 +4,14 @@ import { Team } from "../Models/NHLTeam";
 import { Game } from "../Models/Scores";
 
 const useSettingsViewModel = () => {
-  const [showClear, setShowClear] = useState(false);
-  const [savedGames, setSavedGames] = useState<Game[]>([]);
-  const [savedTeams, setSavedTeams] = useState<Team[]>([]);
+  const [ showClear, setShowClear ] = useState(false);
+  const [ isLoading, setIsLoading ] = useState(false);
+  const [ savedGames, setSavedGames ] = useState<Game[]>([]);
+  const [ savedTeams, setSavedTeams ] = useState<Team[]>([]);
+
 
   const getAllSavedOptions = async () => {
+    setIsLoading(true);
     const keys = await AsyncStorage.getAllKeys();
 
     if (Array.isArray(keys) && keys.length >= 1) {
@@ -25,22 +28,18 @@ const useSettingsViewModel = () => {
           if (key.includes("game")) {
             const json = JSON.parse(value);
 
-            // Handle both wrapped Scores[] and raw Game[]
             if (Array.isArray(json)) {
-              // If it's a Scores[] array
               json.forEach((s: any) => {
                 if (s.games?.length) parsedGames.push(...s.games);
               });
             } else if (json.games) {
               parsedGames.push(...json.games);
             } else {
-              // Maybe stored a single game
               parsedGames.push(json);
             }
           } else if (key.includes("team")) {
             const json = JSON.parse(value);
 
-            // Handle both wrapped NHLTeam and raw Team
             if (json.data && Array.isArray(json.data)) {
               parsedTeams.push(...json.data);
             } else {
@@ -59,16 +58,19 @@ const useSettingsViewModel = () => {
       setSavedGames([]);
       setSavedTeams([]);
     }
+    setIsLoading(false);
   };
 
   const clearAllItemsSaved = async () => {
+    setIsLoading(true);
     await AsyncStorage.clear();
     setShowClear(false);
     setSavedGames([]);
     setSavedTeams([]);
+    setIsLoading(false);
   };
 
-  return { savedGames, savedTeams, showClear, getAllSavedOptions, clearAllItemsSaved };
+  return { savedGames, savedTeams, isLoading, showClear, getAllSavedOptions, clearAllItemsSaved };
 };
 
 export default useSettingsViewModel;

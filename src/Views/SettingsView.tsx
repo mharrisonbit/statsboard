@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-gesture-handler';
+import { FlatList, Text } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../Components/CustomButton';
 import useSettingsViewModel from '../ViewModels/SettingsViewModel';
@@ -27,31 +27,41 @@ const SettingsView = () => {
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Settings</Text>
         </View>
-        {savedGames.length >= 1 ? (
-          savedGames.map((game, index) => (
-            <View key={index}>
-              <Text>
-                {game.teams?.home?.abbreviation} vs{' '}
-                {game.teams?.away?.abbreviation}
-              </Text>
+        <View style={{ gap: 20, marginBottom: 5 }}>
+          {savedGames.length >= 1 ? (
+            <FlatList
+              data={savedGames}
+              renderItem={({ item }) => (
+                <View style={{ marginBottom: 5 }}>
+                  <Text style={styles.item}>
+                    {item.teams?.away?.abbreviation} vs{' '}
+                    {item.teams?.home?.abbreviation}
+                  </Text>
+                </View>
+              )}
+            />
+          ) : (
+            <View>
+              <Text>there are no games saved</Text>
             </View>
-          ))
-        ) : (
-          <View>
-            <Text>there are no games saved</Text>
-          </View>
-        )}
-        {savedTeams.length >= 1 ? (
-          savedTeams.map((team, index) => (
-            <View key={index}>
-              <Text>{team.fullName}</Text>
+          )}
+        </View>
+        <View style={{ gap: 20, marginTop: 5 }}>
+          {savedTeams.length >= 1 ? (
+            <FlatList
+              data={savedTeams}
+              renderItem={({ item }) => (
+                <View style={{ marginBottom: 5 }}>
+                  <Text style={styles.item}>{item.fullName}</Text>
+                </View>
+              )}
+            />
+          ) : (
+            <View>
+              <Text>there are no teams saved</Text>
             </View>
-          ))
-        ) : (
-          <View>
-            <Text>there are no teams saved</Text>
-          </View>
-        )}
+          )}
+        </View>
       </View>
 
       {showClear && (
@@ -70,7 +80,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     margin: 10,
-    justifyContent: 'space-between', // 👈 pushes button to bottom
+    justifyContent: 'space-between',
   },
   contentContainer: {
     flexGrow: 1,
@@ -82,8 +92,20 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
   },
+  gameSwipeItem: {
+    borderWidth: 1,
+    borderColor: 'black',
+    gap: 30,
+  },
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
+    borderWidth: 1,
+    borderColor: 'black',
+  },
   clearButtonContainer: {
-    marginBottom: 20, // 👈 adds padding from bottom safe area
+    marginBottom: 20,
   },
 });
 

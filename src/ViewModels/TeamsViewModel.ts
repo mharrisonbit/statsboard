@@ -11,6 +11,7 @@ const useTeamsViewModel = () => {
     const result = await getTeams();
     if (result !== undefined && result?.data?.length! > 0) {
       const updatedTeams = await checkForSavedTeam(result.data!);
+      updatedTeams.sort((a, b) => b.isSaved - a.isSaved);
       setTeams(updatedTeams);
     } else {
       setTeams([]);
@@ -18,7 +19,7 @@ const useTeamsViewModel = () => {
   };
 
   const saveTeam = async (team: Team) => {
-    const key = team.franchiseId?.toString() + " team";
+    const key = team.triCode + " team";
     if (!key) return;
 
     const existing = await AsyncStorage.getItem(key);
@@ -31,10 +32,10 @@ const useTeamsViewModel = () => {
 
     setTeams((prevTeams) =>
       prevTeams.map((t) =>
-        t.franchiseId === team.franchiseId
+        t.triCode === team.triCode
           ? { ...t, isSaved: !t.isSaved }
           : t
-      )
+      ).sort((a,b) => b.isSaved - a.isSaved)
     );
   };
 
@@ -45,7 +46,7 @@ const useTeamsViewModel = () => {
 
     return data.map((team) => ({
       ...team,
-      isSaved: keys.includes(team.franchiseId?.toString() + ' team' || ""),
+      isSaved: keys.includes(team.triCode + ' team' || ""),
     }));
   };
 

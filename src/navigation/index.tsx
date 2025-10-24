@@ -7,16 +7,15 @@ import { StyleSheet, Text } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { enableScreens } from 'react-native-screens';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import TeamStatsView from '../Views/TeamStatsView.tsx';
+import GamesView from '../Views/GamesView';
 import GlossaryView from '../Views/GlossaryView';
 import HomeView from '../Views/HomeView';
 import SettingsView from '../Views/SettingsView';
 import ShowsView from '../Views/ShowsView';
+import TeamStatsView from '../Views/TeamStatsView.tsx';
 import TeamsView from '../Views/TeamsView';
-import GamesView from '../Views/GamesView';
 import { navigationRef } from './ref';
 import type { RootStackParamList, RootTabParamList } from './types';
-
 
 // Guard enableScreens
 try {
@@ -176,8 +175,8 @@ export default function Navigation() {
             options={({ route }) => ({
               headerShown: true,
               title: route?.params?.id
-                ? `glossary ${route.params.id}`
-                : 'glossarys',
+                ? `Glossary ${route.params.id}`
+                : 'Glossary',
             })}
           />
         </RootStack.Navigator>
