@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { GameStream } from '../Models/GameStream';
 import { NHLGameListing } from '../Models/NHLGameListing';
 import { NHLGlossary } from '../Models/NHLGlossary';
 import { NHLTeam } from '../Models/NHLTeam';
@@ -45,7 +46,7 @@ const useNHLDataManager = () => {
         );
     };
 
-    const getWatchInfo = async (): Promise<NHLGameListing> => {
+    const getWatchInfo = async (): Promise<GameStream[]> => {
         return await callApi(statsUrl + 'v1/where-to-watch');
     };
 

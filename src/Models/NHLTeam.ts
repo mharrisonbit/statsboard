@@ -8,17 +8,18 @@
 // match the expected interface, even if the JSON is valid.
 
 export interface NHLTeam {
-    data?:  Datum[];
+    data?:  Team[];
     total?: number;
 }
 
-export interface Datum {
+export interface Team {
     franchiseId?: number | null;
     fullName?:    string;
     id:          number;
     leagueId?:    number;
     rawTricode?:  string;
     triCode?:     string;
+    isSaved:     boolean;
 }
 
 // Converts JSON strings to/from your types

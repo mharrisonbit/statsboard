@@ -7,11 +7,12 @@ import { StyleSheet, Text } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { enableScreens } from 'react-native-screens';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import GameStatsView from '../Views/GameStatsView';
+import GamesView from '../Views/GamesView';
 import GlossaryView from '../Views/GlossaryView';
 import HomeView from '../Views/HomeView';
 import SettingsView from '../Views/SettingsView';
 import ShowsView from '../Views/ShowsView';
+import TeamStatsView from '../Views/TeamStatsView.tsx';
 import TeamsView from '../Views/TeamsView';
 import { navigationRef } from './ref';
 import type { RootStackParamList, RootTabParamList } from './types';
@@ -105,6 +106,11 @@ export default function Navigation() {
                     screens: {
                       Home: 'home',
                       Details: 'details/:id',
+                      Teams: 'teams',
+                      Stats: 'stats',
+                      Shows: 'shows',
+                      Games: 'games',
+                      Glossary: 'glossary',
                     },
                   },
                   Settings: 'settings',
@@ -114,29 +120,41 @@ export default function Navigation() {
               Teams: 'teams',
               Stats: 'stats',
               Shows: 'shows',
+              Games: 'games',
               Glossary: 'glossary',
             },
           },
         }}
       >
-        <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        <RootStack.Navigator
+          screenOptions={{
+            headerShown: false,
+            headerBackButtonDisplayMode: 'minimal',
+          }}
+        >
           <RootStack.Screen name="Main" component={MainTabs} />
           <RootStack.Screen
             name="Teams"
             component={TeamsView}
             options={({ route }) => ({
               headerShown: true,
-              title: route?.params?.id ? `Team ${route.params.id}` : 'Teams',
+              title: 'Teams',
             })}
           />
           <RootStack.Screen
             name="Stats"
-            component={GameStatsView}
+            component={TeamStatsView}
             options={({ route }) => ({
               headerShown: true,
-              title: route?.params?.id
-                ? `game stats ${route.params.id}`
-                : 'games stat',
+              title: 'Games Stat',
+            })}
+          />
+          <RootStack.Screen
+            name="Games"
+            component={GamesView}
+            options={({ route }) => ({
+              headerShown: true,
+              title: 'Games',
             })}
           />
           <RootStack.Screen
@@ -144,7 +162,7 @@ export default function Navigation() {
             component={ShowsView}
             options={({ route }) => ({
               headerShown: true,
-              title: route?.params?.id ? `show ${route.params.id}` : 'shows',
+              title: 'Streams',
             })}
           />
           <RootStack.Screen
@@ -152,9 +170,7 @@ export default function Navigation() {
             component={GlossaryView}
             options={({ route }) => ({
               headerShown: true,
-              title: route?.params?.id
-                ? `glossary ${route.params.id}`
-                : 'glossarys',
+              title: 'Glossary',
             })}
           />
         </RootStack.Navigator>

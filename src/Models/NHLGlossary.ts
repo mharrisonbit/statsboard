@@ -5,11 +5,11 @@
 //   const nHLGlossary = Convert.toNHLGlossary(json);
 
 export interface NHLGlossary {
-    data?:  Datum[];
+    data?:  Term[];
     total?: number;
 }
 
-export interface Datum {
+export interface Term {
     abbreviation?:       string;
     definition?:         string;
     firstSeasonForStat?: number | null;
