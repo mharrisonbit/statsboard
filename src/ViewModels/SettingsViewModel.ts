@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
+import { twelveHoursDiff } from "../Helpers/Utils";
 import { Team } from "../Models/NHLTeam";
 import { Game } from "../Models/Scores";
 
@@ -35,7 +36,14 @@ const useSettingsViewModel = () => {
             } else if (json.games) {
               parsedGames.push(...json.games);
             } else {
-              parsedGames.push(json);
+              let gameStarted = new Date(json.startTime);
+              let today = new Date();
+              const differenceMs = today.getTime() - gameStarted.getTime();
+              if(differenceMs >= twelveHoursDiff){
+                AsyncStorage.removeItem(key);
+              }else{
+                parsedGames.push(json);
+              }
             }
           } else if (key.includes("team")) {
             const json = JSON.parse(value);
@@ -50,7 +58,7 @@ const useSettingsViewModel = () => {
           console.error(`Error parsing data for key ${key}:`, err);
         }
       }
-
+      
       setSavedGames(parsedGames);
       setSavedTeams(parsedTeams);
     } else {

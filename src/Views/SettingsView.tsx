@@ -1,7 +1,12 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { FlatList, Text } from 'react-native-gesture-handler';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../Components/CustomButton';
 import useSettingsViewModel from '../ViewModels/SettingsViewModel';
@@ -32,12 +37,18 @@ const SettingsView = () => {
             <FlatList
               data={savedGames}
               renderItem={({ item }) => (
-                <View style={{ marginBottom: 5 }}>
-                  <Text style={styles.item}>
-                    {item.teams?.away?.abbreviation} vs{' '}
-                    {item.teams?.home?.abbreviation}
-                  </Text>
-                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log('game was presssed');
+                  }}
+                >
+                  <View style={{ marginBottom: 5 }}>
+                    <Text style={styles.item}>
+                      {item.teams?.away?.abbreviation} vs{' '}
+                      {item.teams?.home?.abbreviation}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               )}
             />
           ) : (
