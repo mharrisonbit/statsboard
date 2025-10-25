@@ -1,12 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../Components/CustomButton';
 import useSettingsViewModel from '../ViewModels/SettingsViewModel';
@@ -34,23 +28,26 @@ const SettingsView = () => {
         </View>
         <View style={{ gap: 20, marginBottom: 5 }}>
           {savedGames.length >= 1 ? (
-            <FlatList
-              data={savedGames}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() => {
-                    console.log('game was presssed');
-                  }}
-                >
+            <View>
+              <Text style={styles.listHeaderText}>Saved Games</Text>
+              <FlatList
+                data={savedGames}
+                renderItem={({ item }) => (
+                  // <TouchableOpacity
+                  //   onPress={() => {
+                  //     console.log('game was presssed');
+                  //   }}
+                  // >
                   <View style={{ marginBottom: 5 }}>
                     <Text style={styles.item}>
                       {item.teams?.away?.abbreviation} vs{' '}
                       {item.teams?.home?.abbreviation}
                     </Text>
                   </View>
-                </TouchableOpacity>
-              )}
-            />
+                  // </TouchableOpacity>
+                )}
+              />
+            </View>
           ) : (
             <View>
               <Text>there are no games saved</Text>
@@ -59,14 +56,17 @@ const SettingsView = () => {
         </View>
         <View style={{ gap: 20, marginTop: 5 }}>
           {savedTeams.length >= 1 ? (
-            <FlatList
-              data={savedTeams}
-              renderItem={({ item }) => (
-                <View style={{ marginBottom: 5 }}>
-                  <Text style={styles.item}>{item.fullName}</Text>
-                </View>
-              )}
-            />
+            <View>
+              <Text style={styles.listHeaderText}>Saved Teams</Text>
+              <FlatList
+                data={savedTeams}
+                renderItem={({ item }) => (
+                  <View style={{ marginBottom: 5 }}>
+                    <Text style={styles.item}>{item.fullName}</Text>
+                  </View>
+                )}
+              />
+            </View>
           ) : (
             <View>
               <Text>there are no teams saved</Text>
@@ -103,10 +103,10 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
   },
-  gameSwipeItem: {
-    borderWidth: 1,
-    borderColor: 'black',
-    gap: 30,
+  listHeaderText: {
+    fontSize: 20,
+    fontWeight: 500,
+    alignSelf: 'center',
   },
   item: {
     padding: 10,
