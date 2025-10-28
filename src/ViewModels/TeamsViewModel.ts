@@ -11,7 +11,8 @@ const useTeamsViewModel = () => {
     const result = await getTeams();
     if (result !== undefined && result?.data?.length! > 0) {
       const updatedTeams = await checkForSavedTeam(result.data!);
-      updatedTeams.sort((a, b) => b.isSaved - a.isSaved);
+      updatedTeams
+      // .sort((a, b) => b.isSaved - a.isSaved);
       setTeams(updatedTeams);
     } else {
       setTeams([]);
@@ -35,8 +36,9 @@ const useTeamsViewModel = () => {
         t.triCode === team.triCode
           ? { ...t, isSaved: !t.isSaved }
           : t
-      ).sort((a,b) => b.isSaved - a.isSaved)
+      )
     );
+    
   };
 
   const checkForSavedTeam = async (data: Team[]): Promise<Team[]> => {

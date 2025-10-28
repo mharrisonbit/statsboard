@@ -1,6 +1,6 @@
-import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,21 +14,15 @@ import useTeamStatsViewModel from '../ViewModels/TeamStatsViewModel.ts';
 
 const TeamStatsView = () => {
   const {
-    isLoading,
+    isFetching,
     games,
-    loadGames,
     searchText,
     scrollViewRef,
+    refetch,
     searchStandings,
     onChangeText,
   } = useTeamStatsViewModel();
   const { openModal, ModalComponent } = useCustomModalPopup();
-
-  useFocusEffect(
-    useCallback(() => {
-      loadGames();
-    }, []),
-  );
 
   return (
     <View style={styles.mainContainer}>
@@ -40,9 +34,19 @@ const TeamStatsView = () => {
         }}
         placeholder="Utah"
         buttonTitle="search"
-        disabled={isLoading}
+        disabled={isFetching}
       />
-      <ScrollView ref={scrollViewRef}>
+      <ScrollView
+        ref={scrollViewRef}
+        refreshControl={
+          <RefreshControl
+            refreshing={isFetching}
+            onRefresh={() => refetch()}
+            colors={['#9Bd35A']}
+            tintColor="#888"
+          />
+        }
+      >
         {games &&
           games.map((standing, index) => (
             <TouchableOpacity
