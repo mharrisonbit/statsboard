@@ -13,16 +13,26 @@ const scoresUrl = 'https://nhl-score-api.herokuapp.com/';
 
 const useNHLDataManager = () => {
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<Error | null>(null);
 
     const callApi = async (url: string): Promise<any> => {
         setIsLoading(true);
+        setError(null); // reset any previous error
+
         try {
-            const response = await fetch(url);
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error("Error fetching data: ", error);
-            return null;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+        } catch (err) {
+            const apiError = err instanceof Error ? err : new Error('Unknown error');
+            console.error('Error fetching data:', apiError);
+            setError(apiError);
+        return null;
         } finally {
             setIsLoading(false);
         }
@@ -81,6 +91,7 @@ const useNHLDataManager = () => {
 
     return {
         isLoading,
+        error,
         getTeams,
         getTeamByTricode,
         getTeamById,
