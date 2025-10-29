@@ -11,7 +11,8 @@ const useTeamsViewModel = () => {
     const result = await getTeams();
     if (result !== undefined && result?.data?.length! > 0) {
       const updatedTeams = await checkForSavedTeam(result.data!);
-      updatedTeams.sort((a, b) => b.isSaved - a.isSaved);
+      updatedTeams
+      // .sort((a, b) => b.isSaved - a.isSaved);
       setTeams(updatedTeams);
     } else {
       setTeams([]);
@@ -24,19 +25,24 @@ const useTeamsViewModel = () => {
 
     const existing = await AsyncStorage.getItem(key);
 
-    if (existing) {
-      await AsyncStorage.removeItem(key);
-    } else {
-      await AsyncStorage.setItem(key, JSON.stringify(team));
-    }
+    existing 
+      ? await AsyncStorage.removeItem(key) 
+      : await AsyncStorage.setItem(key, JSON.stringify(team));
+
+    // if (existing) {
+    //   await AsyncStorage.removeItem(key);
+    // } else {
+    //   await AsyncStorage.setItem(key, JSON.stringify(team));
+    // }
 
     setTeams((prevTeams) =>
       prevTeams.map((t) =>
         t.triCode === team.triCode
           ? { ...t, isSaved: !t.isSaved }
           : t
-      ).sort((a,b) => b.isSaved - a.isSaved)
+      )
     );
+
   };
 
   const checkForSavedTeam = async (data: Team[]): Promise<Team[]> => {

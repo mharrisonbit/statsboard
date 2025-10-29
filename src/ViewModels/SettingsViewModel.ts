@@ -1,9 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
+import useCustomModalPopup from "../Components/CustomPopup";
+import { twelveHoursDiff } from "../Helpers/Utils";
 import { Team } from "../Models/NHLTeam";
 import { Game } from "../Models/Scores";
 
 const useSettingsViewModel = () => {
+  const { openModal, ModalComponent } = useCustomModalPopup();
+  
   const [ showClear, setShowClear ] = useState(false);
   const [ isLoading, setIsLoading ] = useState(false);
   const [ savedGames, setSavedGames ] = useState<Game[]>([]);
@@ -35,7 +39,14 @@ const useSettingsViewModel = () => {
             } else if (json.games) {
               parsedGames.push(...json.games);
             } else {
-              parsedGames.push(json);
+              let gameStarted = new Date(json.startTime);
+              let today = new Date();
+              const differenceMs = today.getTime() - gameStarted.getTime();
+              if(differenceMs >= twelveHoursDiff){
+                AsyncStorage.removeItem(key);
+              }else{
+                parsedGames.push(json);
+              }
             }
           } else if (key.includes("team")) {
             const json = JSON.parse(value);
@@ -50,7 +61,7 @@ const useSettingsViewModel = () => {
           console.error(`Error parsing data for key ${key}:`, err);
         }
       }
-
+      buildButtonsForModal
       setSavedGames(parsedGames);
       setSavedTeams(parsedTeams);
     } else {
@@ -62,15 +73,61 @@ const useSettingsViewModel = () => {
   };
 
   const clearAllItemsSaved = async () => {
+    let buttonsArray = await buildButtonsForModal();
+
+    let result = await openModal(
+      "Clear Data",
+      "What of the saved data would you like to clear?",
+      buttonsArray
+    );
+  
     setIsLoading(true);
-    await AsyncStorage.clear();
-    setShowClear(false);
-    setSavedGames([]);
-    setSavedTeams([]);
+    if(result === 'cancel'){
+      setIsLoading(false);
+      return;
+    }
+    
+    let savedItems = await AsyncStorage.getAllKeys();
+
+    switch (result) {
+      case 'games':
+        let games = savedItems.filter(x => x.includes('game'));
+
+        await AsyncStorage.multiRemove(games);
+        break;
+      case 'teams':
+        let teams = savedItems.filter(x => x.includes('team'));
+
+        await AsyncStorage.multiRemove(teams);
+        break;
+      case 'confirm':
+        await AsyncStorage.clear();
+       
+        break;
+    }
+    
+    getAllSavedOptions();
     setIsLoading(false);
   };
+  
+  const buildButtonsForModal = async (): Promise<{ label: string, value: string }[]> =>{
+    const keys = await AsyncStorage.getAllKeys();
+    
+    let buttonsArray = [
+      { label: "Cancel", value: "cancel" },
+      { label: "All Data", value: "confirm" },
+    ];
+    
+    const teamFound = keys.some(obj => obj.includes("team"));
+    const gameFound = keys.some(obj => obj.includes("game"));
+    
+    if(teamFound) { buttonsArray.splice(1, 0, { label: "Teams", value: "teams" })};
+    if(gameFound) { buttonsArray.splice(1, 0, { label: "Games", value: "games" })};
 
-  return { savedGames, savedTeams, isLoading, showClear, getAllSavedOptions, clearAllItemsSaved };
+    return buttonsArray;
+  }
+
+  return { savedGames, savedTeams, isLoading, showClear, getAllSavedOptions, clearAllItemsSaved, ModalComponent };
 };
 
 export default useSettingsViewModel;

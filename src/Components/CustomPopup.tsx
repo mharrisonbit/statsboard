@@ -1,23 +1,48 @@
-// useSimpleModal.tsx
+// Components/CustomPopup.tsx
 import React, { useCallback, useState } from 'react';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import { isWhiteSpaceOrNull } from '../Helpers/Utils';
 import CustomButton from './CustomButton';
 
+interface ModalButton {
+  label: string;
+  value: string;
+}
+
 const useCustomModalPopup = () => {
   const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-
-  const openModal = useCallback((modalTitle?: string, modalBody?: string) => {
-    setTitle(modalTitle ?? '');
-    setBody(modalBody ?? '');
-    setVisible(true);
-  }, []);
+  const [buttons, setButtons] = useState<ModalButton[]>([]);
+  const [resolver, setResolver] = useState<
+    ((value: string | null) => void) | null
+  >(null);
 
   const closeModal = useCallback(() => {
     setVisible(false);
-  }, []);
+    if (resolver) resolver(null);
+  }, [resolver]);
+
+  const openModal = useCallback(
+    (modalTitle?: string, modalBody?: string, modalButtons?: ModalButton[]) => {
+      return new Promise<string | null>(resolve => {
+        setTitle(modalTitle ?? '');
+        setBody(modalBody ?? '');
+        setButtons(modalButtons ?? [{ label: 'Close', value: 'close' }]);
+        setResolver(() => resolve);
+        setVisible(true);
+      });
+    },
+    [],
+  );
+
+  const handlePress = useCallback(
+    (value: string) => {
+      setVisible(false);
+      if (resolver) resolver(value);
+    },
+    [resolver],
+  );
 
   const ModalComponent = useCallback(() => {
     if (!visible) return null;
@@ -37,12 +62,25 @@ const useCustomModalPopup = () => {
             {!isWhiteSpaceOrNull(body) && (
               <Text style={styles.body}>{body}</Text>
             )}
-            <CustomButton title="Close" onPress={closeModal} />
+
+            <View style={styles.buttonContainer}>
+              {buttons.map((btn, index) => (
+                <View
+                  key={index}
+                  style={{ flexBasis: '45%', marginVertical: 5 }}
+                >
+                  <CustomButton
+                    title={btn.label}
+                    onPress={() => handlePress(btn.value)}
+                  />
+                </View>
+              ))}
+            </View>
           </View>
         </View>
       </Modal>
     );
-  }, [visible, title, body, closeModal]);
+  }, [visible, title, body, buttons, handlePress, closeModal]);
 
   return { openModal, closeModal, ModalComponent };
 };
@@ -60,7 +98,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 20,
-    width: '80%',
+    width: '85%',
+    maxWidth: 400, // helps keep it from stretching too wide on tablets
     elevation: 5,
     shadowColor: '#000',
     shadowOpacity: 0.25,
@@ -78,5 +117,12 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 20,
     textAlign: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap', // ✅ allows wrapping to new lines
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10, // ✅ adds spacing between buttons (React Native 0.71+)
   },
 });
