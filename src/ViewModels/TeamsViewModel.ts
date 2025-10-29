@@ -25,11 +25,15 @@ const useTeamsViewModel = () => {
 
     const existing = await AsyncStorage.getItem(key);
 
-    if (existing) {
-      await AsyncStorage.removeItem(key);
-    } else {
-      await AsyncStorage.setItem(key, JSON.stringify(team));
-    }
+    existing 
+      ? await AsyncStorage.removeItem(key) 
+      : await AsyncStorage.setItem(key, JSON.stringify(team));
+
+    // if (existing) {
+    //   await AsyncStorage.removeItem(key);
+    // } else {
+    //   await AsyncStorage.setItem(key, JSON.stringify(team));
+    // }
 
     setTeams((prevTeams) =>
       prevTeams.map((t) =>
@@ -38,7 +42,7 @@ const useTeamsViewModel = () => {
           : t
       )
     );
-    
+
   };
 
   const checkForSavedTeam = async (data: Team[]): Promise<Team[]> => {
